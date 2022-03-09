@@ -7,6 +7,7 @@ import jenkins.security.MasterToSlaveCallable;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Profile;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
 import org.jenkinsci.plugins.workflow.steps.AbstractStepImpl;
@@ -163,6 +164,14 @@ public class MavenDescriptorStep extends AbstractStepImpl {
             for (String module : modules) {
                 String tempFilePath = StringUtils.endsWith(filePath, File.separator) ? filePath + module + File.separator : filePath + File.separator + module + File.separator;
                 findPomModules(tempFilePath, "pom.xml", result);
+            }
+            
+            for(Profile profile:model.getProfiles()) {
+            	
+	            for (String module : profile.getModules()) {
+	                String tempFilePath = StringUtils.endsWith(filePath, File.separator) ? filePath + module + File.separator : filePath + File.separator + module + File.separator;
+	                findPomModules(tempFilePath, "pom.xml", result);
+	            }
             }
         }
 
